@@ -1,0 +1,146 @@
+plugins {
+	// This id — "net.fabricmc.fabric-loom" — is Loom's own internal
+	// no-remap MARKER plugin (LoomNoRemapGradlePlugin), a near-identical
+	// decoy for the real plugin id "fabric-loom". Using it here is
+	// INTENTIONAL, not a leftover typo, even though it looks like one:
+	// Minecraft ${minecraft_version} ships pre-named (unobfuscated) jars
+	// directly from Mojang, with no "official Mojang mappings" artifact
+	// published to remap against — verified live against
+	// piston-meta.mojang.com's real version manifest and
+	// meta.fabricmc.net, not assumed from training data, and confirmed by
+	// `loom.officialMojangMappings()` failing to resolve for this version
+	// AND for the adjacent 26.1.2 release. So no-remap is the correct mode
+	// for this MC generation, and every "mod*"-prefixed dependency
+	// configuration (modImplementation, modCompileOnly, etc.) correctly
+	// does not exist in this project — use plain source-set-scoped
+	// configuration names instead (see the Mod Menu dependency below).
+	// Do not "fix" this back to 'fabric-loom' or add a `mappings`
+	// dependency without re-verifying against the real manifests first.
+	id 'net.fabricmc.fabric-loom' version "${loom_version}"
+	id 'maven-publish'
+}
+
+// Composed as <mod_version>-<minecraft_version> per fabric-mod-standards.md's
+// Versioning section, e.g. "1.0.0-26.2" — mod_version stays a bare semver
+// string in gradle.properties; this is the only place the two are combined.
+version = "${project.mod_version}-${project.minecraft_version}"
+group = project.maven_group
+
+repositories {
+	// Add repositories to retrieve artifacts from in here.
+	// You should only use this when depending on other mods because
+	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
+	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
+	// for more information about repositories.
+
+	// Required to resolve com.terraformersmc:modmenu (see the dependencies
+	// block below) — Mod Menu is not published to Maven Central or
+	// Fabric's own maven, only here.
+	maven {
+		name = "TerraformersMC"
+		url = "https://maven.terraformersmc.com/"
+	}
+}
+
+loom {
+	splitEnvironmentSourceSets()
+
+	mods {
+		"template-mod" {
+			sourceSet sourceSets.main
+			sourceSet sourceSets.client
+		}
+	}
+}
+
+fabricApi {
+	configureDataGeneration {
+		client = true
+	}
+}
+
+dependencies {
+	// To change the versions see the gradle.properties file
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	// Deliberately no `mappings` dependency — see the plugins{} block
+	// above for why: this MC version has no published mappings artifact
+	// to remap against, and Loom's no-remap mode (which this project uses)
+	// doesn't need one.
+	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+	// Fabric API. This is technically optional, but you probably want it anyway.
+	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+
+	// Mod Menu — soft/compile-time-only dependency for
+	// client.TemplateModMenuIntegration, per minecraft-config-standards.md's
+	// soft-dependency rule. Plain "clientCompileOnly" (scoped to the
+	// client source set that loom.splitEnvironmentSourceSets() creates),
+	// not a "mod*"-prefixed configuration — those don't exist under this
+	// project's no-remap mode (see the plugins{} block above). Keeps Mod
+	// Menu off the runtime classpath so the mod still loads and works with
+	// Mod Menu absent.
+	clientCompileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
+
+	// JUnit 5 — see java-coding-standards.md's Unit Tests section. Test
+	// classes target plain-class logic with no Minecraft dependency (e.g.
+	// com.onthehill.templatemod.progress), so no game-instance test harness
+	// is required.
+	testImplementation platform("org.junit:junit-bom:${project.junit_version}")
+	testImplementation "org.junit.jupiter:junit-jupiter"
+	// Gradle 9 no longer pulls this in transitively from the BOM above —
+	// without it, `test` fails to start with "Failed to load JUnit Platform".
+	testRuntimeOnly "org.junit.platform:junit-platform-launcher"
+}
+
+test {
+	useJUnitPlatform()
+}
+
+processResources {
+	def version = project.version
+	inputs.property "version", version
+
+	filesMatching("fabric.mod.json") {
+		expand "version": version
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = 25
+}
+
+java {
+	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+	// if it is present.
+	// If you remove this line, sources will not be generated.
+	withSourcesJar()
+
+	sourceCompatibility = JavaVersion.VERSION_25
+	targetCompatibility = JavaVersion.VERSION_25
+}
+
+jar {
+	def projectName = project.name
+	inputs.property "projectName", projectName
+
+	from("LICENSE") {
+		rename { "${it}_$projectName"}
+	}
+}
+
+// configure the maven publication
+publishing {
+	publications {
+		create("mavenJava", MavenPublication) {
+			from components.java
+		}
+	}
+
+	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+	repositories {
+		// Add repositories to publish to here.
+		// Notice: This block does NOT have the same function as the block in the top level.
+		// The repositories here will be used for publishing your artifact, not for
+		// retrieving dependencies.
+	}
+}
