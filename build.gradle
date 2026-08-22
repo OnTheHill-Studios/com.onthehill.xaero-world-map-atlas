@@ -46,7 +46,7 @@ loom {
 	splitEnvironmentSourceSets()
 
 	mods {
-		"template-mod" {
+		"xaero-world-map-book" {
 			sourceSet sourceSets.main
 			sourceSet sourceSets.client
 		}
@@ -72,7 +72,7 @@ dependencies {
 	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
 	// Mod Menu — soft/compile-time-only dependency for
-	// client.TemplateModMenuIntegration, per minecraft-config-standards.md's
+	// client.XaeroWorldMapBookMenuIntegration, per minecraft-config-standards.md's
 	// soft-dependency rule. Plain "clientCompileOnly" (scoped to the
 	// client source set that loom.splitEnvironmentSourceSets() creates),
 	// not a "mod*"-prefixed configuration — those don't exist under this
@@ -83,7 +83,7 @@ dependencies {
 
 	// JUnit 5 — see java-coding-standards.md's Unit Tests section. Test
 	// classes target plain-class logic with no Minecraft dependency (e.g.
-	// com.onthehill.templatemod.progress), so no game-instance test harness
+	// com.onthehill.xaeroworldmapbook.progress), so no game-instance test harness
 	// is required.
 	testImplementation platform("org.junit:junit-bom:${project.junit_version}")
 	testImplementation "org.junit.jupiter:junit-jupiter"

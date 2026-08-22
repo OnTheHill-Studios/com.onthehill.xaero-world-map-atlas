@@ -10,4 +10,4 @@ pluginManagement {
 }
 
 // Should match your modid
-rootProject.name = 'template-mod'
+rootProject.name = 'xaero-world-map-book'

@@ -21,11 +21,11 @@
   - `ai-specs/standards/rules/minecraft-config-standards.md` — config GUI/command/JSON parity, client-vs-server field classification, consolidated GUI tabs, reset controls, save/close dirty-tracking
   - `ai-specs/standards/rules/minecraft-gui-standards.md` — `Screen`/`ClickableWidget` construction, tooltips, narration
   - `ai-specs/standards/rules/java-coding-standards.md` — naming, Javadoc, formatting, unit test conventions
-  - `src/main/java/com/onthehill/templatemod/TemplateMod.java` — existing common entrypoint (extended, not replaced)
-  - `src/client/java/com/onthehill/templatemod/client/TemplateModClient.java` — existing client entrypoint (extended, not replaced)
+  - `src/main/java/com/onthehill/xaeroworldmapbook/XaeroWorldMapBook.java` — existing common entrypoint (extended, not replaced)
+  - `src/client/java/com/onthehill/xaeroworldmapbook/client/XaeroWorldMapBookClient.java` — existing client entrypoint (extended, not replaced)
   - `src/main/resources/fabric.mod.json` — existing manifest
 - **Writes to:** every file listed under `## Implementation Requirements` below
-- **Existing stubs:** `TemplateMod.onInitialize()` and `TemplateModClient.onInitializeClient()` were empty placeholders before this spec; both now also wire up this example feature. `ExampleMixin`/`ExampleClientMixin` are unrelated placeholders and are untouched by this spec.
+- **Existing stubs:** `XaeroWorldMapBook.onInitialize()` and `XaeroWorldMapBookClient.onInitializeClient()` were empty placeholders before this spec; both now also wire up this example feature. `ExampleMixin`/`ExampleClientMixin` are unrelated placeholders and are untouched by this spec.
 
 ---
 
@@ -43,32 +43,32 @@ The feature itself: a single example progress value, `[0, 1)`, that advances eve
 
 | Component | Fields Used | Access |
 |-----------|-------------|--------|
-| `ServerProgressConfig` | `progressRate` | Read (tick advancement), read/write (admin GUI + `/template-mod-admin config`) |
-| `ClientVisualizationConfig` | `visualizationMode` | Read (HUD renderer), read/write (client GUI tab + `/template-mod config`) |
+| `ServerProgressConfig` | `progressRate` | Read (tick advancement), read/write (admin GUI + `/xaero-world-map-book-admin config`) |
+| `ClientVisualizationConfig` | `visualizationMode` | Read (HUD renderer), read/write (client GUI tab + `/xaero-world-map-book config`) |
 | `ClientNetworkHandler` (synced state) | `lastSyncedProgress`, `lastSyncedRatePerTick`, `ticksSinceLastSync` | Read (HUD renderer, via `ProgressMath.extrapolate`) |
 
 ### Outputs
 
 | Component | Fields Modified | Notes |
 |-----------|----------------|-------|
-| `TemplateMod` (static tick state) | `currentProgress` | Advanced once per server tick via `TickProgressState.advance`; wraps at 1.0 |
-| `ServerProgressConfig` | `progressRate`, `allowNonOpReadOnlyView` | Written by admin GUI save, `/template-mod-admin config` commands, and JSON load-fallback — all three routed through the same `ServerProgressConfig.validate(float)` |
-| `ClientVisualizationConfig` | `visualizationMode` | Written by client GUI tab and `/template-mod config visualization` — client-authoritative, no server validation involved |
+| `XaeroWorldMapBook` (static tick state) | `currentProgress` | Advanced once per server tick via `TickProgressState.advance`; wraps at 1.0 |
+| `ServerProgressConfig` | `progressRate`, `allowNonOpReadOnlyView` | Written by admin GUI save, `/xaero-world-map-book-admin config` commands, and JSON load-fallback — all three routed through the same `ServerProgressConfig.validate(float)` |
+| `ClientVisualizationConfig` | `visualizationMode` | Written by client GUI tab and `/xaero-world-map-book config visualization` — client-authoritative, no server validation involved |
 
 ### New Types Required
 
-- `com.onthehill.templatemod.progress.TickProgressState` — pure static tick-advance function
-- `com.onthehill.templatemod.progress.ProgressMath` — pure static client-side extrapolation function
-- `com.onthehill.templatemod.config.ServerProgressConfig` — server-authoritative config object + JSON load/save + shared validation
-- `com.onthehill.templatemod.client.config.ProgressVisualizationMode` — enum `{BAR, RADIAL}`
-- `com.onthehill.templatemod.client.config.ClientVisualizationConfig` — client-authoritative config object + JSON load/save
-- `com.onthehill.templatemod.network.ProgressSyncPayload` (S2C), `AdminConfigSyncPayload` (S2C), `AdminConfigUpdatePayload` (C2S), `OpenAdminScreenPayload` (S2C) — `CustomPayload` records
-- `com.onthehill.templatemod.network.ModNetworking` — payload type + server receiver registration
-- `com.onthehill.templatemod.ModCommands` — `/template-mod-admin` command tree
-- `com.onthehill.templatemod.client.network.ClientNetworkHandler` — client receiver registration + last-synced state
-- `com.onthehill.templatemod.client.ClientModCommands` — `/template-mod` command tree
-- `com.onthehill.templatemod.client.render.ProgressHudRenderer` — HUD draw logic
-- `com.onthehill.templatemod.client.screen.ProgressConfigScreen`, `SaveConfirmScreen` — consolidated config GUI
+- `com.onthehill.xaeroworldmapbook.progress.TickProgressState` — pure static tick-advance function
+- `com.onthehill.xaeroworldmapbook.progress.ProgressMath` — pure static client-side extrapolation function
+- `com.onthehill.xaeroworldmapbook.config.ServerProgressConfig` — server-authoritative config object + JSON load/save + shared validation
+- `com.onthehill.xaeroworldmapbook.client.config.ProgressVisualizationMode` — enum `{BAR, RADIAL}`
+- `com.onthehill.xaeroworldmapbook.client.config.ClientVisualizationConfig` — client-authoritative config object + JSON load/save
+- `com.onthehill.xaeroworldmapbook.network.ProgressSyncPayload` (S2C), `AdminConfigSyncPayload` (S2C), `AdminConfigUpdatePayload` (C2S), `OpenAdminScreenPayload` (S2C) — `CustomPayload` records
+- `com.onthehill.xaeroworldmapbook.network.ModNetworking` — payload type + server receiver registration
+- `com.onthehill.xaeroworldmapbook.ModCommands` — `/xaero-world-map-book-admin` command tree
+- `com.onthehill.xaeroworldmapbook.client.network.ClientNetworkHandler` — client receiver registration + last-synced state
+- `com.onthehill.xaeroworldmapbook.client.ClientModCommands` — `/xaero-world-map-book` command tree
+- `com.onthehill.xaeroworldmapbook.client.render.ProgressHudRenderer` — HUD draw logic
+- `com.onthehill.xaeroworldmapbook.client.screen.ProgressConfigScreen`, `SaveConfirmScreen` — consolidated config GUI
 
 ---
 
@@ -109,7 +109,7 @@ On join and after any successful admin config change, the server sends each conn
 | `ServerProgressConfig.MIN_PROGRESS_RATE` | `0.0001f` | progress/tick | Strictly positive floor so the value never appears to stall |
 | `ServerProgressConfig.MAX_PROGRESS_RATE` | `0.999f` | progress/tick | Stays below 1 per the feature's own "rate is less than 1" requirement, guaranteeing at least one visible tick before reset |
 | `ServerProgressConfig.DEFAULT_ALLOW_NON_OP_READ_ONLY_VIEW` | `true` | boolean | Mandatory default per `minecraft-config-standards.md` |
-| `TemplateMod.PROGRESS_BROADCAST_INTERVAL_TICKS` | `20` | ticks | 1 real-time second at 20 TPS — frequent enough to correct client drift quickly, far less frequent than a per-tick packet |
+| `XaeroWorldMapBook.PROGRESS_BROADCAST_INTERVAL_TICKS` | `20` | ticks | 1 real-time second at 20 TPS — frequent enough to correct client drift quickly, far less frequent than a per-tick packet |
 
 ---
 
@@ -119,31 +119,31 @@ Files the implementing AI must create or modify. All paths relative to the repo 
 
 ### Create
 
-- `src/main/java/com/onthehill/templatemod/progress/TickProgressState.java`
-- `src/main/java/com/onthehill/templatemod/progress/ProgressMath.java`
-- `src/main/java/com/onthehill/templatemod/config/ServerProgressConfig.java`
-- `src/main/java/com/onthehill/templatemod/network/ProgressSyncPayload.java`
-- `src/main/java/com/onthehill/templatemod/network/AdminConfigSyncPayload.java`
-- `src/main/java/com/onthehill/templatemod/network/AdminConfigUpdatePayload.java`
-- `src/main/java/com/onthehill/templatemod/network/OpenAdminScreenPayload.java`
-- `src/main/java/com/onthehill/templatemod/network/ModNetworking.java`
-- `src/main/java/com/onthehill/templatemod/ModCommands.java`
-- `src/client/java/com/onthehill/templatemod/client/config/ProgressVisualizationMode.java`
-- `src/client/java/com/onthehill/templatemod/client/config/ClientVisualizationConfig.java`
-- `src/client/java/com/onthehill/templatemod/client/network/ClientNetworkHandler.java`
-- `src/client/java/com/onthehill/templatemod/client/render/ProgressHudRenderer.java`
-- `src/client/java/com/onthehill/templatemod/client/screen/ProgressConfigScreen.java`
-- `src/client/java/com/onthehill/templatemod/client/screen/SaveConfirmScreen.java`
-- `src/client/java/com/onthehill/templatemod/client/TemplateModMenuIntegration.java` — Mod Menu soft-dependency integration per `minecraft-config-standards.md`
-- `src/client/java/com/onthehill/templatemod/client/ClientModCommands.java`
-- `src/main/resources/assets/template-mod/lang/en_us.json`
-- `src/test/java/com/onthehill/templatemod/progress/TickProgressStateTest.java`
-- `src/test/java/com/onthehill/templatemod/progress/ProgressMathTest.java`
+- `src/main/java/com/onthehill/xaeroworldmapbook/progress/TickProgressState.java`
+- `src/main/java/com/onthehill/xaeroworldmapbook/progress/ProgressMath.java`
+- `src/main/java/com/onthehill/xaeroworldmapbook/config/ServerProgressConfig.java`
+- `src/main/java/com/onthehill/xaeroworldmapbook/network/ProgressSyncPayload.java`
+- `src/main/java/com/onthehill/xaeroworldmapbook/network/AdminConfigSyncPayload.java`
+- `src/main/java/com/onthehill/xaeroworldmapbook/network/AdminConfigUpdatePayload.java`
+- `src/main/java/com/onthehill/xaeroworldmapbook/network/OpenAdminScreenPayload.java`
+- `src/main/java/com/onthehill/xaeroworldmapbook/network/ModNetworking.java`
+- `src/main/java/com/onthehill/xaeroworldmapbook/ModCommands.java`
+- `src/client/java/com/onthehill/xaeroworldmapbook/client/config/ProgressVisualizationMode.java`
+- `src/client/java/com/onthehill/xaeroworldmapbook/client/config/ClientVisualizationConfig.java`
+- `src/client/java/com/onthehill/xaeroworldmapbook/client/network/ClientNetworkHandler.java`
+- `src/client/java/com/onthehill/xaeroworldmapbook/client/render/ProgressHudRenderer.java`
+- `src/client/java/com/onthehill/xaeroworldmapbook/client/screen/ProgressConfigScreen.java`
+- `src/client/java/com/onthehill/xaeroworldmapbook/client/screen/SaveConfirmScreen.java`
+- `src/client/java/com/onthehill/xaeroworldmapbook/client/XaeroWorldMapBookMenuIntegration.java` — Mod Menu soft-dependency integration per `minecraft-config-standards.md`
+- `src/client/java/com/onthehill/xaeroworldmapbook/client/ClientModCommands.java`
+- `src/main/resources/assets/xaero-world-map-book/lang/en_us.json`
+- `src/test/java/com/onthehill/xaeroworldmapbook/progress/TickProgressStateTest.java`
+- `src/test/java/com/onthehill/xaeroworldmapbook/progress/ProgressMathTest.java`
 
 ### Modify
 
-- `src/main/java/com/onthehill/templatemod/TemplateMod.java` — add type registration, command registration, `SERVER_STARTED`/`END_SERVER_TICK`/`JOIN` wiring for the example feature, alongside the existing placeholder log line
-- `src/client/java/com/onthehill/templatemod/client/TemplateModClient.java` — add client config load, receiver registration, client command registration, tick counter, and `HudRenderCallback` registration
+- `src/main/java/com/onthehill/xaeroworldmapbook/XaeroWorldMapBook.java` — add type registration, command registration, `SERVER_STARTED`/`END_SERVER_TICK`/`JOIN` wiring for the example feature, alongside the existing placeholder log line
+- `src/client/java/com/onthehill/xaeroworldmapbook/client/XaeroWorldMapBookClient.java` — add client config load, receiver registration, client command registration, tick counter, and `HudRenderCallback` registration
 - `build.gradle` — add JUnit 5 `testImplementation`s and `test { useJUnitPlatform() }`
 - `gradle.properties` — add `junit_version`
 - `LICENSE`, `src/main/resources/fabric.mod.json` (`license` field) — CC0 → MIT, per `fabric-mod-standards.md`'s "License: MIT, always" rule (a pre-existing drift from the standard, corrected incidentally while this spec's author was in these files — noted here rather than silently bundled, per the spec workflow's own transparency expectation)
@@ -187,13 +187,13 @@ Per `java-coding-standards.md`: for every unit of pure, Minecraft-independent lo
 The spec is complete when all of the following are true:
 
 - [x] The example progress value advances every server tick by the configured rate and wraps at 1
-- [x] The rate is classified server-authoritative, is OP-gated, and is reachable from all three required surfaces (admin GUI tab, `/template-mod-admin config progress-rate`, JSON config file)
-- [x] The visualization choice is classified client-authoritative and is reachable from all three required surfaces (client GUI tab, `/template-mod config visualization`, JSON config file)
+- [x] The rate is classified server-authoritative, is OP-gated, and is reachable from all three required surfaces (admin GUI tab, `/xaero-world-map-book-admin config progress-rate`, JSON config file)
+- [x] The visualization choice is classified client-authoritative and is reachable from all three required surfaces (client GUI tab, `/xaero-world-map-book config visualization`, JSON config file)
 - [x] Both a bar and a radial visualization are implemented, selectable via client config
 - [x] The consolidated config screen has separate Client/Admin tabs, each with per-field and section-wide reset controls
 - [x] The screen tracks a dirty flag and intercepts Close with a three-action confirm prompt when dirty
 - [x] The mandatory non-op read-only-view setting exists, defaults to `true`, and gates the sync payload's contents (not just rendering)
-- [x] Client and server commands live under disjoint roots (`/template-mod` vs `/template-mod-admin`), and every `-admin` command is op-gated
+- [x] Client and server commands live under disjoint roots (`/xaero-world-map-book` vs `/xaero-world-map-book-admin`), and every `-admin` command is op-gated
 - [x] Payload type registration is unconditional; server receiver registration is deferred to `SERVER_STARTED`
 - [x] Mod Menu is a soft/compile-time-only dependency, the mod loads and works with it absent, and `getModConfigScreenFactory()` returns the same construction path the client `gui` command uses — confirmed via a real `./gradlew build` (see the 2026-08-15 rows in `ai-specs/HANDOFF.md`); loads with it as a plain `clientCompileOnly` dependency under this project's no-remap Loom mode
 - [x] All 4 required tests pass for both `TickProgressState` and `ProgressMath` (8 total)
@@ -220,13 +220,13 @@ The full config/network/command/GUI stack described above: pure server-tick and 
 
 ### Issues Encountered
 
-- **This sandbox has no Minecraft/Fabric Loom toolchain** — nothing in this repo was compiled, and no `javap` verification against real mapped jars (as `fabric-mod-standards.md` and `minecraft-gui-standards.md` both require before trusting an API signature) was possible. Every class was written for API consistency with the pre-existing `TemplateMod.java` (which uses `net.minecraft.resources.Identifier` / `Identifier.fromNamespaceAndPath`, not the more commonly-documented `net.minecraft.util.Identifier` / `Identifier.of` — this repo's pinned Minecraft version's actual mappings were followed by matching that existing file, not assumed) and with the exact API usages shown in the standards docs' own code samples, but **none of it has been built or run**. **RESOLVED 2026-08-15** — a later session's sandbox did have a real JDK/Gradle toolchain; see `ai-specs/HANDOFF.md`'s 2026-08-15 rows for the full story. Status of each item below:
+- **This sandbox has no Minecraft/Fabric Loom toolchain** — nothing in this repo was compiled, and no `javap` verification against real mapped jars (as `fabric-mod-standards.md` and `minecraft-gui-standards.md` both require before trusting an API signature) was possible. Every class was written for API consistency with the pre-existing `XaeroWorldMapBook.java` (which uses `net.minecraft.resources.Identifier` / `Identifier.fromNamespaceAndPath`, not the more commonly-documented `net.minecraft.util.Identifier` / `Identifier.of` — this repo's pinned Minecraft version's actual mappings were followed by matching that existing file, not assumed) and with the exact API usages shown in the standards docs' own code samples, but **none of it has been built or run**. **RESOLVED 2026-08-15** — a later session's sandbox did have a real JDK/Gradle toolchain; see `ai-specs/HANDOFF.md`'s 2026-08-15 rows for the full story. Status of each item below:
   - A full `./gradlew build` pass — **done, passes** (`BUILD SUCCESSFUL`, jar produced)
   - Visual, on-screen confirmation of `ProgressConfigScreen`'s `Layout`-tree composition — **still outstanding**, no launchable game client available in any sandbox session so far
   - Visual confirmation of `ProgressHudRenderer`'s radial wedge rendering — **still outstanding**, same reason
   - Confirmation of the real Minecraft/Fabric API class names — **done**, and it turned out the guesses were substantially wrong (Yarn-style names instead of this version's real Mojang-named API, e.g. `net.minecraft.text.Text`→`net.minecraft.network.chat.Component`, `CustomPayload`→`CustomPacketPayload`, int op-levels→a named permission-tier system) — every file was rewritten against `javap` output from the real cached jars, not guessed
 
-- **A real `./gradlew build` attempt by the project owner failed** with "cannot find method modCompileOnly() for arguments [...]" on the Mod Menu dependency line, confirming the concern above was not hypothetical. Diagnosed (without being able to reproduce/verify in this sandbox — no Gradle/Loom toolchain here either) as two compounding mistakes in the same change: (1) `repositories {}` was left empty, so `com.terraformersmc:modmenu` — published only to `https://maven.terraformersmc.com/`, not Maven Central or Fabric's own maven — had nowhere to resolve from; (2) the dependency was declared as the bare `modCompileOnly`, which targets the `main` source set, when `TemplateModMenuIntegration` lives entirely in the `client` source set that `loom.splitEnvironmentSourceSets()` creates — it needed the source-set-prefixed `clientModCompileOnly` instead, matching Fabric's own split-source-set example-mod convention. **RESOLVED 2026-08-15, but the actual root cause was different than either guess above**: the real problem was `build.gradle`'s plugin id being Loom's no-remap marker plugin, which meant *no* `mod*`-prefixed configuration existed at all (not a repository or scoping problem specifically) — see `ai-specs/HANDOFF.md`. The final, working dependency line is plain `clientCompileOnly` (no `mod` prefix), since this project correctly runs in no-remap mode.
+- **A real `./gradlew build` attempt by the project owner failed** with "cannot find method modCompileOnly() for arguments [...]" on the Mod Menu dependency line, confirming the concern above was not hypothetical. Diagnosed (without being able to reproduce/verify in this sandbox — no Gradle/Loom toolchain here either) as two compounding mistakes in the same change: (1) `repositories {}` was left empty, so `com.terraformersmc:modmenu` — published only to `https://maven.terraformersmc.com/`, not Maven Central or Fabric's own maven — had nowhere to resolve from; (2) the dependency was declared as the bare `modCompileOnly`, which targets the `main` source set, when `XaeroWorldMapBookMenuIntegration` lives entirely in the `client` source set that `loom.splitEnvironmentSourceSets()` creates — it needed the source-set-prefixed `clientModCompileOnly` instead, matching Fabric's own split-source-set example-mod convention. **RESOLVED 2026-08-15, but the actual root cause was different than either guess above**: the real problem was `build.gradle`'s plugin id being Loom's no-remap marker plugin, which meant *no* `mod*`-prefixed configuration existed at all (not a repository or scoping problem specifically) — see `ai-specs/HANDOFF.md`. The final, working dependency line is plain `clientCompileOnly` (no `mod` prefix), since this project correctly runs in no-remap mode.
 
 ### Suggested Follow-Up Specs
 

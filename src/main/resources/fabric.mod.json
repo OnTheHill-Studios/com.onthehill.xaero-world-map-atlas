@@ -1,37 +1,37 @@
 {
 	"schemaVersion": 1,
-	"id": "template-mod",
+	"id": "xaero-world-map-book",
 	"version": "${version}",
-	"name": "Template Mod",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"name": "Xaero World Map Book",
+	"description": "Wraps Xaero\u2019s World Map (and, optionally, Xaero\u2019s Minimap) so access to them is gated behind in-world items, and adjusts how their maps present in-game.",
 	"authors": [
-		"Me!"
+		"OnTheHill Studios"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://github.com/OnTheHill-Studios/com.onthehill.xaero-world-map-book",
+		"sources": "https://github.com/OnTheHill-Studios/com.onthehill.xaero-world-map-book"
 	},
 	"license": "MIT",
-	"icon": "assets/template-mod/icon.png",
+	"icon": "assets/xaero-world-map-book/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.onthehill.templatemod.TemplateMod"
+			"com.onthehill.xaeroworldmapbook.XaeroWorldMapBook"
 		],
 		"client": [
-			"com.onthehill.templatemod.client.TemplateModClient"
+			"com.onthehill.xaeroworldmapbook.client.XaeroWorldMapBookClient"
 		],
 		"fabric-datagen": [
-			"com.onthehill.templatemod.client.TemplateModDataGenerator"
+			"com.onthehill.xaeroworldmapbook.client.XaeroWorldMapBookDataGenerator"
 		],
 		"modmenu": [
-			"com.onthehill.templatemod.client.TemplateModMenuIntegration"
+			"com.onthehill.xaeroworldmapbook.client.XaeroWorldMapBookMenuIntegration"
 		]
 	},
 	"mixins": [
-		"template-mod.mixins.json",
+		"xaero-world-map-book.mixins.json",
 		{
-			"config": "template-mod.client.mixins.json",
+			"config": "xaero-world-map-book.client.mixins.json",
 			"environment": "client"
 		}
 	],
