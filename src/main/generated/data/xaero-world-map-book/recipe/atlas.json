@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    "#minecraft:compasses",
+    "minecraft:map",
+    "minecraft:book"
+  ],
+  "result": {
+    "id": "xaero-world-map-book:atlas"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "criteria": {
+    "crafted_atlas": {
+      "conditions": {
+        "recipe_id": "xaero-world-map-book:atlas"
+      },
+      "trigger": "minecraft:recipe_crafted"
+    },
+    "obtained_atlas": {
+      "conditions": {
+        "items": [
+          {
+            "items": "xaero-world-map-book:atlas"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "background": "minecraft:block/dirt",
+    "description": {
+      "translate": "advancements.xaero-world-map-book.craft_atlas.description"
+    },
+    "icon": {
+      "id": "xaero-world-map-book:atlas"
+    },
+    "title": {
+      "translate": "advancements.xaero-world-map-book.craft_atlas.title"
+    }
+  },
+  "requirements": [
+    [
+      "crafted_atlas"
+    ],
+    [
+      "obtained_atlas"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

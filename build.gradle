@@ -40,6 +40,15 @@ repositories {
 		name = "TerraformersMC"
 		url = "https://maven.terraformersmc.com/"
 	}
+
+	// Required to resolve Xaero's World Map and Xaero's Minimap (see the
+	// dependencies block below) — both are closed-source (All Rights
+	// Reserved) and published only here, confirmed directly from each mod's
+	// own Modrinth "For Developers" section.
+	maven {
+		name = "ChocolateMinecraft"
+		url = "https://chocolateminecraft.com/maven"
+	}
 }
 
 loom {
@@ -80,6 +89,21 @@ dependencies {
 	// Menu off the runtime classpath so the mod still loads and works with
 	// Mod Menu absent.
 	clientCompileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
+
+	// Xaero's World Map — hard dependency (fabric.mod.json's "depends").
+	// Only referenced from client-only classes (client.integration.XaeroWorldMapBridge,
+	// client.mixin.XaeroWorldMapOpenGateMixin), so scoped to the client
+	// source set, but as a real "Implementation" (not CompileOnly) since
+	// this mod cannot function at runtime without it actually present.
+	clientImplementation "xaero.map:xaeroworldmap-fabric-${project.minecraft_version}:${project.xaero_world_map_version}"
+
+	// Xaero's Minimap — soft dependency (fabric.mod.json's "suggests").
+	// CompileOnly, same rationale as the Mod Menu dependency above: this
+	// mod's client.integration.XaeroMinimapVisibilityHook is only ever
+	// called when FabricLoader confirms xaerominimap is actually loaded
+	// (see client.XaeroWorldMapBookClient), so it must not be required on
+	// the runtime classpath.
+	clientCompileOnly "xaero.minimap:xaerominimap-fabric-${project.minecraft_version}:${project.xaero_minimap_version}"
 
 	// JUnit 5 — see java-coding-standards.md's Unit Tests section. Test
 	// classes target plain-class logic with no Minecraft dependency (e.g.

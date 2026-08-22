@@ -20,10 +20,9 @@ public final class XaeroWorldMapBookMenuIntegration implements ModMenuApi
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory()
     {
-        // Same construction path the "/xaero-world-map-book gui" client command
-        // uses — one screen-construction path, two entry points into it.
-        // The screen itself internally hosts both the client and admin
-        // tabs; see ProgressConfigScreen's own Javadoc.
-        return ProgressConfigScreen::createOnClientTab;
+        // Same construction path "/xaero-world-map-book gui" and
+        // "/xaero-world-map-book-admin gui" both use — one screen-construction
+        // path, multiple entry points into it (see ProgressConfigScreen's own Javadoc).
+        return ProgressConfigScreen::create;
     }
 }

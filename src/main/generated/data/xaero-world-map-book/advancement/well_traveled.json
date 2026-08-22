@@ -1,0 +1,26 @@
+{
+  "parent": "xaero-world-map-book:craft_atlas",
+  "criteria": {
+    "well_traveled": {
+      "trigger": "xaero-world-map-book:well_traveled"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.xaero-world-map-book.well_traveled.description"
+    },
+    "frame": "goal",
+    "icon": {
+      "id": "xaero-world-map-book:atlas"
+    },
+    "title": {
+      "translate": "advancements.xaero-world-map-book.well_traveled.title"
+    }
+  },
+  "requirements": [
+    [
+      "well_traveled"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

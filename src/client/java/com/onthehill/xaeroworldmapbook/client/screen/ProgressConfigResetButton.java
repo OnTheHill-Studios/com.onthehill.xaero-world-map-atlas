@@ -33,9 +33,12 @@ import net.minecraft.resources.Identifier;
  * <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache License 2.0</a>.
  * Rasterized from the upstream SVG path data (fetched via Iconify's public
  * SVG API, which re-serves the same MDI glyph set) to a 64x64 RGBA PNG —
- * this mod's own asset build, not a redistributed upstream binary. See
- * {@code README.md}'s Third-Party Assets section for the same attribution in
- * this project's own credits location.
+ * this mod's own asset build, not a redistributed upstream binary. Recolored
+ * to solid white (preserving the original alpha shape exactly) so it reads
+ * correctly against this screen's grey buttons and can be multiplicatively
+ * tinted for the drop shadow below without the tint being unable to lighten
+ * a darker source color. See {@code README.md}'s Third-Party Assets section
+ * for the same attribution in this project's own credits location.
  * <p>
  * Extends vanilla's own {@link Button} (rather than being built from
  * scratch) specifically so hover/disabled/focus background chrome, click
@@ -89,6 +92,21 @@ final class ProgressConfigResetButton extends Button
         return new ProgressConfigResetButton(x, y, size, narrationMessage, onPress);
     }
 
+    /**
+     * Shadow tint applied to the offset copy drawn behind the main icon, matching vanilla's own text-shadow
+     * darkening convention (each RGB channel divided by 4 — {@code 255/4 ≈ 64 = 0x40}). The icon texture itself is
+     * plain white with alpha (see {@link #ICON}'s own file), so multiplicative tinting can recolor it freely —
+     * unlike the original black-on-transparent icon, which could only ever be darkened further by a tint, never
+     * lightened to white.
+     */
+    private static final int SHADOW_COLOR = 0xFF404040;
+
+    /** Full white, i.e. no recoloring — the icon texture is already the exact color this button wants on top. */
+    private static final int MAIN_COLOR = 0xFFFFFFFF;
+
+    /** How far down-and-right the shadow copy is offset from the main icon, matching vanilla's own text-shadow offset. */
+    private static final int SHADOW_OFFSET = 1;
+
     // AbstractButton's own extractWidgetRenderState (background chrome/hover
     // state) is final — extractContents is the actual per-button-subclass
     // content-drawing hook (what Button itself overrides to draw centered
@@ -119,19 +137,30 @@ final class ProgressConfigResetButton extends Button
         int iconY = getY() + (getHeight() - iconSize) / 2;
 
         // Parameter order: (x, y, u, v, width, height, srcWidth, srcHeight,
-        // textureWidth, textureHeight) — "width"/"height" is the on-screen
-        // draw size, "srcWidth"/"srcHeight" is the region sampled from the
-        // texture (in texture pixels), "textureWidth"/"textureHeight" is the
-        // full backing texture's own dimensions (used to normalize the UV
-        // coordinates). Draws at (iconSize, iconSize), sampling the icon's
-        // full (ICON_TEXTURE_SIZE, ICON_TEXTURE_SIZE) source region.
+        // textureWidth, textureHeight, color) — "width"/"height" is the
+        // on-screen draw size, "srcWidth"/"srcHeight" is the region sampled
+        // from the texture (in texture pixels), "textureWidth"/"textureHeight"
+        // is the full backing texture's own dimensions (used to normalize the
+        // UV coordinates), and "color" is an ARGB multiplicative tint. Drawn
+        // twice: once offset down-right and tinted dark (the drop shadow),
+        // then once at the true position with no recoloring — the same
+        // shadow-then-main draw order vanilla's own text-shadow rendering
+        // uses, so this icon reads consistently with the white, shadowed
+        // button labels around it.
+        blitIcon(guiGraphics, iconX + SHADOW_OFFSET, iconY + SHADOW_OFFSET, iconSize, SHADOW_COLOR);
+        blitIcon(guiGraphics, iconX, iconY, iconSize, MAIN_COLOR);
+    }
+
+    private void blitIcon(GuiGraphicsExtractor guiGraphics, int x, int y, int iconSize, int color)
+    {
         guiGraphics.blit(
             RenderPipelines.GUI_TEXTURED,
             ICON,
-            iconX, iconY,
+            x, y,
             0.0f, 0.0f,
             iconSize, iconSize,
             ICON_TEXTURE_SIZE, ICON_TEXTURE_SIZE,
-            ICON_TEXTURE_SIZE, ICON_TEXTURE_SIZE);
+            ICON_TEXTURE_SIZE, ICON_TEXTURE_SIZE,
+            color);
     }
 }

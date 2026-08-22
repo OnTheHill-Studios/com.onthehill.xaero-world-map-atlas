@@ -1,0 +1,241 @@
+{
+  "model": {
+    "type": "minecraft:range_dispatch",
+    "property": "minecraft:compass",
+    "scale": 32,
+    "target": "spawn",
+    "entries": [
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "xaero-world-map-book:item/atlas_16"
+        },
+        "threshold": 0
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "xaero-world-map-book:item/atlas_17"
+        },
+        "threshold": 0.5
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "xaero-world-map-book:item/atlas_18"
+        },
+        "threshold": 1.5
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "xaero-world-map-book:item/atlas_19"
+        },
+        "threshold": 2.5
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "xaero-world-map-book:item/atlas_20"
+        },
+        "threshold": 3.5
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "xaero-world-map-book:item/atlas_21"
+        },
+        "threshold": 4.5
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "xaero-world-map-book:item/atlas_22"
+        },
+        "threshold": 5.5
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "xaero-world-map-book:item/atlas_23"
+        },
+        "threshold": 6.5
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "xaero-world-map-book:item/atlas_24"
+        },
+        "threshold": 7.5
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "xaero-world-map-book:item/atlas_25"
+        },
+        "threshold": 8.5
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "xaero-world-map-book:item/atlas_26"
+        },
+        "threshold": 9.5
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "xaero-world-map-book:item/atlas_27"
+        },
+        "threshold": 10.5
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "xaero-world-map-book:item/atlas_28"
+        },
+        "threshold": 11.5
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "xaero-world-map-book:item/atlas_29"
+        },
+        "threshold": 12.5
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "xaero-world-map-book:item/atlas_30"
+        },
+        "threshold": 13.5
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "xaero-world-map-book:item/atlas_31"
+        },
+        "threshold": 14.5
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "xaero-world-map-book:item/atlas_00"
+        },
+        "threshold": 15.5
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "xaero-world-map-book:item/atlas_01"
+        },
+        "threshold": 16.5
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "xaero-world-map-book:item/atlas_02"
+        },
+        "threshold": 17.5
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "xaero-world-map-book:item/atlas_03"
+        },
+        "threshold": 18.5
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "xaero-world-map-book:item/atlas_04"
+        },
+        "threshold": 19.5
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "xaero-world-map-book:item/atlas_05"
+        },
+        "threshold": 20.5
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "xaero-world-map-book:item/atlas_06"
+        },
+        "threshold": 21.5
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "xaero-world-map-book:item/atlas_07"
+        },
+        "threshold": 22.5
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "xaero-world-map-book:item/atlas_08"
+        },
+        "threshold": 23.5
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "xaero-world-map-book:item/atlas_09"
+        },
+        "threshold": 24.5
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "xaero-world-map-book:item/atlas_10"
+        },
+        "threshold": 25.5
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "xaero-world-map-book:item/atlas_11"
+        },
+        "threshold": 26.5
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "xaero-world-map-book:item/atlas_12"
+        },
+        "threshold": 27.5
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "xaero-world-map-book:item/atlas_13"
+        },
+        "threshold": 28.5
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "xaero-world-map-book:item/atlas_14"
+        },
+        "threshold": 29.5
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "xaero-world-map-book:item/atlas_15"
+        },
+        "threshold": 30.5
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "xaero-world-map-book:item/atlas_16"
+        },
+        "threshold": 31.5
+      }
+    ]
+  }
+}
